@@ -2,21 +2,25 @@
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
 			"path": "pages/index/index",
-			"style": {}
+			"style": {
+				"navigationStyle": "custom"
+			}
 		}, {
 			"path": "pages/index/monthData",
-			"style": {}
+			"style": {
+				"navigationBarTitleText":"会员数据"
+			}
+		}, {
+			"path": "pages/index/changeStore",
+			"style": {
+				"navigationBarTitleText":"切换团队"
+			}
 		}
-	    ,{
-            "path" : "pages/index/changeStore",
-            "style" : {}
-        }
-    ],
+	],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
+		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "私教端",
-		"navigationStyle": "custom",
-		"navigationBarBackgroundColor": "#F8F8F8",
+		"navigationBarBackgroundColor": "#4c515f",
 		"backgroundColor": "#F8F8F8"
 	}
 }

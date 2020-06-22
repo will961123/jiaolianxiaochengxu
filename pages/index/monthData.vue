@@ -1,10 +1,10 @@
 <template>
 	<!-- 月上课量 -->
 	<view class="monthDataView">
-		<cu-custom bgColor="bg-myblack" :isBack="true"><block slot="content">会员数据</block></cu-custom>
+		<!-- <cu-custom bgColor="bg-myblack" :isBack="true"><block slot="content">会员数据</block></cu-custom> -->
 
 		<!-- 切换月份 -->
-		<view class="dateBox">
+		<view :style="{ top: 0 + 'px' }" class="dateBox">
 			<picker mode="date" fields="month" :start="startDate" :end="endDate" @change="bindDateChange">
 				<view class="date">
 					{{ selectDate.year }}年{{ selectDate.month }}月
@@ -14,13 +14,13 @@
 		</view>
 
 		<!-- swiper & canvas -->
-		<swiper class="swiper bg-white" :indicator-dots="true">
+		<swiper indicator-active-color="#adadad" indicator-color="#eaeaea" :style="{ 'margin-top': 40 + 'px' }" class="swiper bg-white" :indicator-dots="true">
 			<swiper-item>
 				<view class="canvasDataBox flex justify-between ">
 					<view class="left  flex flex-direction justify-between">
 						<view class="itemTitle">完成课时</view>
 						<view class="numBox">
-							<text class="num">0</text>
+							<text class="num">{{ canvasData.page1.useNum }}</text>
 							<text>节</text>
 						</view>
 						<view class="proportion">
@@ -35,7 +35,8 @@
 					<view class="right">
 						<view class="itemTitle">上课会员</view>
 						<view class="flex justify-between align-center">
-							<canvas canvas-id="canvasRing1" id="canvasRing1" class="charts"></canvas>
+							<view class="canvasBox"><canvas v-show="canShowCanvas" canvas-id="canvasRing1" id="canvasRing1" class="charts"></canvas></view>
+
 							<view class="legendBox flex flex-direction justify-between">
 								<view v-for="(item, index) in canvasData.page1.data" :key="index" :class="[legendClass[index], 'item yellow flex justify-between']">
 									<text>{{ item.name }}</text>
@@ -51,17 +52,18 @@
 					<view class="left  flex flex-direction justify-between">
 						<view class="itemTitle">当前剩余/总课时</view>
 						<view class="numBox">
-							<text class="num">352</text>
-							<text>429节</text>
+							<text class="num">{{ canvasData.page2.nowNum }}</text>
+							<text>{{ '/' + canvasData.page2.totStudyNum }}节</text>
 						</view>
 					</view>
 					<view class="right">
 						<view class="itemTitle">有课会员</view>
 						<view class="flex justify-between align-center">
-							<canvas canvas-id="canvasRing2" id="canvasRing2" class="charts"></canvas>
+							<view class="canvasBox"><canvas v-show="canShowCanvas" canvas-id="canvasRing2" id="canvasRing2" class="charts"></canvas></view>
+
 							<view class="legendBox flex flex-direction justify-between">
 								<view class="legendBox flex flex-direction justify-between">
-									<view v-for="(item, index) in canvasData.page1.data" :key="index" :class="[legendClass[index], 'item yellow flex justify-between']">
+									<view v-for="(item, index) in canvasData.page2.data" :key="index" :class="[legendClass[index], 'item yellow flex justify-between']">
 										<text>{{ item.name }}</text>
 										<text>{{ item.data }}人</text>
 									</view>
@@ -73,8 +75,8 @@
 			</swiper-item>
 		</swiper>
 
-		<view class="typeBox flex justify-between align-center">
-			<view class="title">总会员 14 人</view>
+		<view :style="{ top: 0 + 40 + 'px' }" class="typeBox sticky-box flex justify-between align-center">
+			<view class="title">总会员 {{userList[selectType].length}} 人</view>
 			<view>
 				<view @click="selectType = 0" :class="selectType === 0 ? 'item select' : 'item'">
 					当前
@@ -87,34 +89,36 @@
 					剩余课时
 				</view>
 				<view @click="selectType = 2" :class="selectType === 2 ? 'item select' : 'item'">
-					6月
+					{{ selectDate.month }}月
 					<br />
 					消耗课时
 				</view>
 			</view>
 		</view>
-		
-		<view class="bg-white scrollView">
-			<view class="item flex align-center justify-between">
+
+		<!-- 需要使用scrollview 的话就把view 换成scrollview -->
+		<view id="scrollView" class="bg-white scrollView">
+			<!-- <scroll-view :style="{ height: scrollViewHeight }" id="scrollView" class="bg-white scrollView" scroll-y="true"> -->
+			<view v-for="(item, index) in userList[selectType]" :key="index" class="item flex align-center justify-between">
 				<view class="flex align-center">
-					<view class="idx">1</view>
+					<view :style="{ 'background-color': collerList[index] || 'transparent', color: index > 2 ? '#666' : '#fff' }" class="idx">{{ index + 1 }}</view>
 					<view class="userBox flex align-center">
-						<view class="head">德才</view>
+						<view class="head  ">{{ item.name[item.name.length - 2] + item.name[item.name.length - 1] }}</view>
 						<view>
-							<view class="name">杨德才</view>
-							<view class="phone">139*****9197</view>
+							<view class="name ">{{ item.name }}</view>
+							<view class="phone">{{ item.phone }}</view>
 						</view>
 					</view>
 				</view>
-			
+
 				<view class="numBox flex align-center">
-					<view class="item">81</view>
-					<view class="item">81</view>
-					<view class="item">81</view>
+					<view class="num">{{ item.tot }}</view>
+					<view class="num">{{ item.now }}</view>
+					<view class="num">{{ item.use }}</view>
 				</view>
 			</view>
+			<!-- </scroll-view> -->
 		</view>
-	
 	</view>
 </template>
 
@@ -128,11 +132,17 @@ export default {
 			cWidth: '',
 			cHeight: '',
 			pixelRatio: 1,
+			userList: [[], [], []], // 存放请求的数据
 			canvasData: { page1: { data: [] }, page2: { data: [] } }, // 存放canvas模拟数据
 			legendClass: ['skyblue', 'blue', 'yellow'],
+			canvasTop: 100, // canvas 右侧图例距离顶部高度
+			canShowCanvas: true, // canvas是原生组件 层级太高 无法覆盖 判断下滚动高度是否显示
 
 			selectDate: this.getDate('month'),
-			selectType: 0
+			selectType: 0,
+			collerList: ['#c9ab82', '#a9b0ba', '#86babe'],
+			scrollViewHeight: '30vh', // scrollview 高度
+			CustomBar: this.CustomBar
 		};
 	},
 	computed: {
@@ -150,47 +160,136 @@ export default {
 		// this.cHeight = 200;
 		this.getServerData();
 	},
+	onReady() {
+		const query = uni.createSelectorQuery().in(this);
+		query
+			.select('#scrollView')
+			.boundingClientRect(data => {
+				this.scrollViewHeight = 'calc(100vh - ' + data.top.toFixed(2) + 'px)';
+				console.log(this.scrollViewHeight);
+			})
+			.exec();
+		query
+			.select('.legendBox')
+			.boundingClientRect(data => {
+				this.canvasTop = data.top.toFixed(2);
+			})
+			.exec();
+	},
+	onPageScroll(res) {
+		if (res.scrollTop + 0 + 40 > this.canvasTop) {
+		// if (res.scrollTop + this.CustomBar + 40 > this.canvasTop) {
+			console.log('隐藏canvas');
+			this.canShowCanvas = false;
+		} else {
+			this.canShowCanvas = true;
+		}
+	},
 	methods: {
-		// 发起请求
+		// 发起请求 初始化数据
 		getServerData() {
 			/**
 			 * 请求数据
+			 * 按照3种类型排序好的
 			 */
-			let data = {
-				page1: {
-					totNum: 15,
-					data: [
-						{
-							name: '消耗>12节',
-							data: 1
-						},
-						{
-							name: '消耗5-12节',
-							data: 2
-						},
-						{
-							name: '消耗1-4节',
-							data: 3
-						}
-					]
-				},
-				page2: {
-					totNum: 11,
-					data: [
-						{
-							name: '剩余>30节',
-							data: 1
-						},
-						{
-							name: '剩余10-30节',
-							data: 2
-						},
-						{
-							name: '剩余<10节',
-							data: 3
-						}
-					]
+			let resData = [
+				[
+					{ name: '杨德才', phone: '139****9197', tot: 81, now: 22, use: 3 },
+					{ name: '杨德才', phone: '139****9197', tot: 81, now: 22, use: 3 },
+					{ name: '杨德才', phone: '139****9197', tot: 81, now: 22, use: 3 },
+					{ name: '张楠', phone: '139****9197', tot: 42, now: 71, use: 16 },
+					{ name: '张楠', phone: '139****9197', tot: 42, now: 71, use: 16 },
+					{ name: '张楠', phone: '139****9197', tot: 42, now: 71, use: 16 },
+					{ name: '黄洋洋', phone: '139****9197', tot: 38, now: 16, use: 16 },
+					{ name: '黄洋洋', phone: '139****9197', tot: 38, now: 16, use: 16 },
+					{ name: '黄洋洋', phone: '139****9197', tot: 38, now: 16, use: 16 },
+					{ name: '阮林平', phone: '139****9197', tot: 37, now: 8, use: 6 },
+					{ name: '阮林平', phone: '139****9197', tot: 37, now: 8, use: 6 },
+					{ name: '阮林平', phone: '139****9197', tot: 37, now: 8, use: 6 },
+					{ name: '石金华', phone: '139****9197', tot: 32, now: 16, use: 12 },
+					{ name: '石金华', phone: '139****9197', tot: 32, now: 16, use: 12 },
+					{ name: '石金华', phone: '139****9197', tot: 32, now: 16, use: 12 }
+				],
+				[
+					{ name: '张楠', phone: '139****9197', tot: 42, now: 71, use: 16 },
+					{ name: '张楠', phone: '139****9197', tot: 42, now: 71, use: 16 },
+					{ name: '张楠', phone: '139****9197', tot: 42, now: 71, use: 16 },
+					{ name: '杨德才', phone: '--', tot: 81, now: 22, use: 3 },
+					{ name: '杨德才', phone: '--', tot: 81, now: 22, use: 3 },
+					{ name: '杨德才', phone: '--', tot: 81, now: 22, use: 3 },
+					{ name: '黄洋洋', phone: '139****9197', tot: 38, now: 16, use: 16 },
+					{ name: '黄洋洋', phone: '139****9197', tot: 38, now: 16, use: 16 },
+					{ name: '黄洋洋', phone: '139****9197', tot: 38, now: 16, use: 16 },
+					{ name: '石金华', phone: '139****9197', tot: 32, now: 16, use: 12 },
+					{ name: '石金华', phone: '139****9197', tot: 32, now: 16, use: 12 },
+					{ name: '石金华', phone: '139****9197', tot: 32, now: 16, use: 12 },
+					{ name: '阮林平', phone: '139****9197', tot: 37, now: 8, use: 6 },
+					{ name: '阮林平', phone: '139****9197', tot: 37, now: 8, use: 6 },
+					{ name: '阮林平', phone: '139****9197', tot: 37, now: 8, use: 6 }
+				],
+				[
+					{ name: '张楠', phone: '139****9197', tot: 42, now: 71, use: 16 },
+					{ name: '张楠', phone: '139****9197', tot: 42, now: 71, use: 16 },
+					{ name: '张楠', phone: '139****9197', tot: 42, now: 71, use: 16 },
+					{ name: '黄洋洋', phone: '139****9197', tot: 38, now: 16, use: 16 },
+					{ name: '黄洋洋', phone: '139****9197', tot: 38, now: 16, use: 16 },
+					{ name: '黄洋洋', phone: '139****9197', tot: 38, now: 16, use: 16 },
+					{ name: '石金华', phone: '139****9197', tot: 32, now: 16, use: 12 },
+					{ name: '石金华', phone: '139****9197', tot: 32, now: 16, use: 12 },
+					{ name: '石金华', phone: '139****9197', tot: 32, now: 16, use: 12 },
+					{ name: '阮林平', phone: '139****9197', tot: 37, now: 8, use: 6 },
+					{ name: '阮林平', phone: '139****9197', tot: 37, now: 8, use: 6 },
+					{ name: '阮林平', phone: '139****9197', tot: 37, now: 8, use: 6 },
+					{ name: '杨德才', phone: '--', tot: 81, now: 22, use: 3 },
+					{ name: '杨德才', phone: '--', tot: 81, now: 22, use: 3 },
+					{ name: '杨德才', phone: '--', tot: 81, now: 22, use: 3 }
+				]
+			];
+			this.userList = resData;
+			// 处理成canvas需要的格式  只需要一种排序好的数组
+			let userList = resData[0];
+			let page1 = {
+				totNum: 0,
+				useNum: 0, //完成课时
+				data: [{ name: '消耗>12节', data: 0 }, { name: '消耗5-12节', data: 0 }, { name: '消耗1-4节', data: 0 }]
+			};
+			let page2 = {
+				totNum: 0,
+				nowNum: 0, //当前剩余/总课时
+				totStudyNum: 0,
+				data: [{ name: '剩余>30节', data: 0 }, { name: '剩余10-30节', data: 0 }, { name: '剩余<10节', data: 0 }]
+			};
+			for (let i in userList) {
+				if (userList[i].use > 0 && userList[i].use <= 4) {
+					page1.data[2].data += 1;
+				} else if (userList[i].use > 4 && userList[i].use <= 12) {
+					page1.data[1].data += 1;
+				} else if (userList[i].use > 12) {
+					page1.data[0].data += 1;
 				}
+
+				page1.useNum += userList[i].use;
+
+				if (userList[i].now < 10) {
+					page2.data[2].data += 1;
+				} else if (userList[i].now >= 10 && userList[i].now <= 30) {
+					page2.data[1].data += 1;
+				} else if (userList[i].now > 30) {
+					page2.data[0].data += 1;
+				}
+				page2.nowNum += userList[i].now;
+				page2.totStudyNum += userList[i].tot;
+			}
+			page1.totNum = page1.data.reduce((t, v) => {
+				return (t += v.data);
+			}, 0);
+			page2.totNum = page2.data.reduce((t, v) => {
+				return (t += v.data);
+			}, 0);
+
+			let data = {
+				page1,
+				page2
 			};
 			this.canvasData = data;
 			/**
@@ -304,8 +403,22 @@ export default {
 </script>
 
 <style lang="scss">
+.sticky-box {
+	/* #ifndef APP-PLUS-NVUE */
+	display: flex;
+	position: -webkit-sticky;
+	/* #endif */
+	position: sticky;
+	z-index: 99;
+	flex-direction: row;
+}
+
 .monthDataView {
 	.dateBox {
+		position: fixed;
+		width: 100%;
+		left: 0;
+		z-index: 9;
 		.date {
 			font: 34rpx;
 			color: #fff;
@@ -356,11 +469,15 @@ export default {
 			}
 			.right {
 				flex: 1;
+				.canvasBox {
+					width: 255rpx;
+					height: 250rpx;
+					margin-left: -20px;
+				}
 				.charts {
 					width: 255rpx;
 					height: 250rpx;
 					background-color: #ffffff;
-					margin-left: -20px;
 				}
 				.legendBox {
 					font-size: 22rpx;
@@ -384,7 +501,7 @@ export default {
 						}
 						&.blue {
 							&::after {
-								background-color: #2fc25b;
+								background-color: #26b9a0;
 							}
 						}
 						&.skyblue {
@@ -419,44 +536,45 @@ export default {
 			}
 		}
 	}
-	
-	.scrollView{
-		&>.item{
+
+	.scrollView {
+		.item {
 			border-bottom: 1rpx solid #ededed;
 			padding: 30rpx 0;
 			font-size: 24rpx;
-			.idx{
-					margin: 0 15rpx;
-					width: 36rpx;
-					height: 36rpx;
-					line-height: 36rpx;
-					background-color: red;
-					text-align: center; 
-					border-radius: 8rpx; 
+			.idx {
+				margin: 0 15rpx;
+				width: 36rpx;
+				height: 36rpx;
+				line-height: 36rpx;
+				text-align: center;
+				border-radius: 8rpx;
 			}
-			.userBox{
-				.head{
-					background-color: red;
-					width: 64rpx;
-					height: 64rpx;
-					line-height: 64rpx;
+			.userBox {
+				width: 230rpx;
+				.head {
+					background-color: #26b9a0;
+					width: 68rpx;
+					height: 68rpx;
+					line-height: 68rpx;
 					border-radius: 50%;
 					text-align: center;
 					margin-right: 8rpx;
 					color: #fff;
 				}
-				.name{
+				.name {
 					font-size: 28rpx;
 					margin-bottom: 6rpx;
 				}
-				.phone{
+				.phone {
 					margin-left: 6rpx;
 				}
 			}
-			.numBox{
+			.numBox {
 				flex: 1;
 				margin-left: 40rpx;
-				.item{
+				font-size: 28rpx;
+				.num {
 					width: 32%;
 					text-align: center;
 				}
