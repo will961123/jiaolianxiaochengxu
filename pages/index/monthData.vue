@@ -397,6 +397,7 @@ export default {
 		bindDateChange(e) {
 			let date = e.detail.value.split('-');
 			this.selectDate = { year: date[0], month: date[1] };
+			// 再次请求数据
 		}
 	}
 };

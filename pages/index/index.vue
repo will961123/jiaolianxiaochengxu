@@ -47,7 +47,7 @@
 
 		<!-- 中间菜单 -->
 		<view class="menuListBox bg-white grid text-center   col-4">
-			<view v-for="(item, index) in menuList" :key="index" class="item flex flex-direction align-center ">
+			<view @click="navgater(item.path)" v-for="(item, index) in menuList" :key="index" class="item flex flex-direction align-center ">
 				<view :style="[{ 'background-color': item.color }]" class="iconBox flex justify-center align-center "><image :src="item.icon" mode="widthFix"></image></view>
 				<text class="name">{{ item.name }}</text>
 			</view>
@@ -89,7 +89,8 @@ export default {
 				{
 					icon: '/static/logo.png',
 					name: '动作库',
-					color: '#7570fe'
+					color: '#7570fe',
+					path:'/pages/actionLibrary/actionLibrary'
 				},
 				{
 					icon: '/static/logo.png',

@@ -8,12 +8,23 @@
 		}, {
 			"path": "pages/index/monthData",
 			"style": {
-				"navigationBarTitleText":"会员数据"
+				"navigationBarTitleText": "会员数据"
 			}
 		}, {
 			"path": "pages/index/changeStore",
 			"style": {
-				"navigationBarTitleText":"切换团队"
+				"navigationBarTitleText": "切换团队"
+			}
+		}, {
+			"path": "pages/actionLibrary/actionLibrary",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/actionLibrary/addAction",
+			"style": {
+				"navigationBarTitleText": "添加动作"
 			}
 		}
 	],

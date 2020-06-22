@@ -17,8 +17,8 @@ export default {
 				Vue.prototype.StatusBar = e.statusBarHeight;
 				let custom = wx.getMenuButtonBoundingClientRect();
 				Vue.prototype.Custom = custom;
-				Vue.prototype.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
-				 Vue.prototype.CustomBar<0? Vue.prototype.CustomBar=60:'';
+				Vue.prototype.CustomBar = custom.bottom + custom.top - e.statusBarHeight+5;
+				 Vue.prototype.CustomBar<0? Vue.prototype.CustomBar=65:'';
 				// #endif
 
 				// #ifdef MP-ALIPAY
