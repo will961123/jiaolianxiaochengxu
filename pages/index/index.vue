@@ -84,7 +84,8 @@ export default {
 				{
 					icon: '/static/logo.png',
 					name: '训练模板',
-					color: '#17b1c4'
+					color: '#17b1c4',
+					path:'/pages/trainingTemplate/trainingTemplate'
 				},
 				{
 					icon: '/static/logo.png',

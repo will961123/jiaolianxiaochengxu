@@ -1,4 +1,5 @@
 <template>
+	<!-- 动作库 -->
 	<view class="actionLibraryView">
 		<cu-custom bgColor="bg-myblack" :isBack="true">
 			<block slot="content">动作库</block>
@@ -32,16 +33,23 @@
 					@touchstart="ListTouchStart"
 					@touchmove="ListTouchMove"
 					@touchend="ListTouchEnd"
+					@click="gotoActionDetail"
 					:data-target="'move-box-' + index"
 				>
 					<image class="cu-avatar lg" :src="item.logo" mode="aspectFill"></image>
 
-					<view class="content">
-						<view class="text-black">{{ item.name }}</view>
-
-						<view class="text-gray text-sm">
-							<text v-for="(itm, idx) in item.bodyParts" :key="idx" class=" text-gray  margin-right-xs">{{ itm }}</text>
-							<text class="text-white">.</text>
+					<view class="content flex justify-between">
+						<view class="flex flex-direction">
+							<view class="text-black">{{ item.name }}</view>
+							<view class="text-gray text-sm">
+								<text v-for="(itm, idx) in item.bodyParts" :key="idx" class=" text-gray  margin-right-xs">{{ itm }}</text>
+								<text class="text-white">.</text>
+							</view>
+						</view>
+						<view v-show="type === 'select'" class="numBox flex align-center">
+							<view @click.stop="item.num--" v-show="item.num > 0" class="less roundBox"><text class="cuIcon cuIcon-move text-bold"></text></view>
+							<view v-show="item.num > 0" class="num">{{ item.num }}</view>
+							<view @click.stop="item.num++" class="add roundBox bg-blue"><text class="cuIcon cuIcon-add text-bold"></text></view>
 						</view>
 					</view>
 					<view @click.stop="del(index)" class="move">
@@ -51,6 +59,18 @@
 				</view>
 			</view>
 		</scroll-view>
+
+		<view v-show="type === 'select'" class="selectNumBox bg-white flex align-center justify-between">
+			<view class="numBox flex1">
+				动作数量：
+				<text class="num text-blue">{{ selectNum }}</text>
+			</view>
+		<!-- 	<view class="rowBox flex1">
+				内容
+				<text class="cuIcon margin-left-sm cuIcon-unfold"></text>
+			</view> -->
+			<view @click="saveSelect" class="btn bg-blue flex1">确认</view>
+		</view>
 	</view>
 </template>
 
@@ -70,23 +90,33 @@ export default {
 			isClick: false,
 
 			list: [
-				{ name: '哑铃推举', logo: '', bodyParts: ['肩部', '正式'] },
-				{ name: '牛角包翻转', logo: '', bodyParts: [] },
-				{ name: '牛角包', logo: '', bodyParts: ['躯干'] },
-				{ name: '哑铃推举', logo: '', bodyParts: ['肩部', '正式'] },
-				{ name: '牛角包翻转', logo: '', bodyParts: [] },
-				{ name: '牛角包', logo: '', bodyParts: ['躯干'] },
-				{ name: '哑铃推举', logo: '', bodyParts: ['肩部', '正式'] },
-				{ name: '牛角包翻转', logo: '', bodyParts: [] },
-				{ name: '牛角包', logo: '', bodyParts: ['躯干'] },
-				{ name: '哑铃推举', logo: '', bodyParts: ['肩部', '正式'] },
-				{ name: '牛角包翻转', logo: '', bodyParts: [] },
-				{ name: '牛角包', logo: '', bodyParts: ['躯干'] },
-				{ name: '哑铃推举', logo: '', bodyParts: ['肩部', '正式'] },
-				{ name: '牛角包翻转', logo: '', bodyParts: [] },
-				{ name: '牛角包', logo: '', bodyParts: ['躯干'] }
-			]
+				{ name: '哑铃推举', logo: '', bodyParts: ['肩部', '正式'], num: 1 },
+				{ name: '牛角包翻转', logo: '', bodyParts: [], num: 0 },
+				{ name: '牛角包', logo: '', bodyParts: ['躯干'], num: 0 },
+				{ name: '哑铃推举', logo: '', bodyParts: ['肩部', '正式'], num: 0 },
+				{ name: '牛角包翻转', logo: '', bodyParts: [], num: 0 },
+				{ name: '牛角包', logo: '', bodyParts: ['躯干'], num: 0 },
+				{ name: '哑铃推举', logo: '', bodyParts: ['肩部', '正式'], num: 0 },
+				{ name: '牛角包翻转', logo: '', bodyParts: [], num: 0 },
+				{ name: '牛角包', logo: '', bodyParts: ['躯干'], num: 0 },
+				{ name: '哑铃推举', logo: '', bodyParts: ['肩部', '正式'], num: 0 },
+				{ name: '牛角包翻转', logo: '', bodyParts: [], num: 0 },
+				{ name: '牛角包', logo: '', bodyParts: ['躯干'], num: 0 },
+				{ name: '哑铃推举', logo: '', bodyParts: ['肩部', '正式'], num: 0 },
+				{ name: '牛角包翻转', logo: '', bodyParts: [], num: 0 },
+				{ name: '牛角包', logo: '', bodyParts: ['躯干'], num: 0 }
+			],
+
+			type: '',
+			 
 		};
+	},
+	computed: { 
+		selectNum() {
+			return this.list.reduce((t, v) => {
+				return t + v.num;
+			}, 0);
+		}
 	},
 	onReady() {
 		const query = uni.createSelectorQuery().in(this);
@@ -94,14 +124,33 @@ export default {
 			.select('#scrollView')
 			.boundingClientRect(data => {
 				this.scrollViewHeight = `calc(100vh - ${data.top.toFixed(2)}px)`;
+				console.log(this.type);
+				if (this.type === 'select') {
+					this.scrollViewHeight = `calc(100vh - ${data.top.toFixed(2)}px - 50px)`;
+				}
 			})
 			.exec();
 	},
+	onLoad(options) {
+		if (options.type) {
+			this.type = options.type;
+		}
+	},
 	methods: {
+		saveSelect(){
+			uni.navigateBack({
+				delta:1
+			})
+		},
+		gotoActionDetail() {
+			uni.navigateTo({
+				url: '/pages/actionLibrary/actionDetail'
+			});
+		},
 		gotoAddAction() {
 			uni.navigateTo({
-				url:"/pages/actionLibrary/addAction"
-			})
+				url: '/pages/actionLibrary/addAction'
+			});
 		},
 		del(idx) {
 			uni.showModal({
@@ -184,11 +233,55 @@ export default {
 				}
 				.content {
 					left: 230rpx;
+					flex: 1;
+					.numBox {
+						.less {
+							border: 1rpx solid #999999;
+							color: #999;
+						}
+						.roundBox {
+							width: 46rpx;
+							height: 46rpx;
+							line-height: 46rpx;
+							border-radius: 50%;
+							text-align: center;
+						}
+						.num {
+							margin: 0 30rpx;
+						}
+					}
 				}
 				.move {
 					width: 70px;
 				}
 			}
+		}
+	}
+
+	.selectNumBox {
+		width: 100%;
+		height: 50px;
+		position: fixed;
+		left: 0;
+		bottom: 0;
+		border-top: 1rpx solid #999;
+		padding-left: 35rpx;
+		.numBox {
+			color: #000;
+			font-weight: 34rpx;
+			.num {
+				font-size: 38rpx;
+			}
+		}
+		.rowBox {
+			color: #999;
+		}
+		.btn {
+			width: 34%;
+			height: 50px;
+			line-height: 50px;
+			text-align: center;
+			font-size: 28rpx;
 		}
 	}
 }

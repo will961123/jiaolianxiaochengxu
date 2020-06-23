@@ -26,8 +26,40 @@
 			"style": {
 				"navigationBarTitleText": "添加动作"
 			}
+		}, {
+			"path": "pages/actionLibrary/addActionImg",
+			"style": {
+				"navigationBarTitleText": "添加动作视频/图片"
+			}
+		}, {
+			"path": "pages/actionLibrary/addActionPoints",
+			"style": {
+				"navigationBarTitleText": "编辑动作要领"
+			}
+		}, {
+			"path": "pages/actionLibrary/actionDetail",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}, {
+			"path": "pages/trainingTemplate/trainingTemplate",
+			"style": {
+				"navigationBarTitleText": "训练模板"
+			}
 		}
-	],
+	    ,{
+            "path" : "pages/trainingTemplate/addTrainingTemplate",
+            "style" : {
+				"navigationBarTitleText": "训练模板"
+			}
+        }
+        ,{
+            "path" : "pages/trainingTemplate/addTrainingClass",
+            "style" : {
+				"navigationBarTitleText": "编辑课程"
+			}
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "私教端",
