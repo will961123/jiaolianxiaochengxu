@@ -74,7 +74,8 @@ export default {
 				{
 					icon: '/static/logo.png',
 					name: '训练计划',
-					color: '#ef750f'
+					color: '#ef750f',
+					path:"/pages/trainingPlan/chooseUser"
 				},
 				{
 					icon: '/static/logo.png',

@@ -35,4 +35,9 @@ export default {
 /*每个页面公共css */
 @import 'colorui/main.css';
 @import 'colorui/icon.css';
+.textov1 {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
 </style>

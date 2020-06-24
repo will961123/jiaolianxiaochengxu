@@ -162,7 +162,7 @@
 			</view>
 		</view>
 
-		<!-- 可选器械 -->
+		<!-- 阻力-->
 		<view class="cu-modal bottom-modal " :class="modalName == 'Resistance' ? 'show' : ''" @tap="hideModal">
 			<view style="padding: 0;" class="cu-dialog bg-white" @tap.stop="">
 				<view class="iptbox2">

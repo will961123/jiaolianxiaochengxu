@@ -46,17 +46,63 @@
 			"style": {
 				"navigationBarTitleText": "训练模板"
 			}
+		}, {
+			"path": "pages/trainingTemplate/addTrainingTemplate",
+			"style": {
+				"navigationBarTitleText": "训练模板"
+			}
+		}, {
+			"path": "pages/trainingTemplate/addTrainingClass",
+			"style": {
+				// "navigationBarTitleText": "编辑课程"
+				"navigationStyle": "custom"
+			}
+		}, {
+			"path": "pages/trainingPlan/chooseUser",
+			"style": {
+				"navigationBarTitleText": "选择客户的训练计划"
+			}
+		}, {
+			"path": "pages/trainingPlan/userTrainingPlanList",
+			"style": {
+				"navigationBarTitleText": "训练计划"
+			}
+		}, {
+			"path": "pages/trainingPlan/addTrainingPlan",
+			"style": {
+				"navigationBarTitleText": "添加训练计划"
+			}
 		}
 	    ,{
-            "path" : "pages/trainingTemplate/addTrainingTemplate",
+            "path" : "pages/trainingPlan/trainingPlanDetail",
             "style" : {
-				"navigationBarTitleText": "训练模板"
+				"navigationBarTitleText": "训练计划详情"
 			}
         }
         ,{
-            "path" : "pages/trainingTemplate/addTrainingClass",
+            "path" : "pages/trainingPlan/classDetail",
             "style" : {
-				"navigationBarTitleText": "编辑课程"
+				"navigationBarTitleText": "课程详情"
+			}
+        }
+        ,{
+            "path" : "pages/trainingPlan/beforeClass",
+            "style" : {
+				"navigationBarTitleText": "课前准备"
+			}
+        }
+        ,{
+            "path" : "pages/trainingPlan/addInformation",
+            "style" : {
+				"navigationBarTitleText": "补充信息"
+			}
+        }
+        ,{
+            "path" : "pages/trainingPlan/startClass",
+            "style" : {
+				"navigationBarTitleText": "开始上课",
+				"navigationBarTextStyle": "black",
+				"navigationBarBackgroundColor": "#FFFFFF"
 			}
         }
     ],
