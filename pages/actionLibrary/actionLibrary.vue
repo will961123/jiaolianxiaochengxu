@@ -14,8 +14,8 @@
 		</view>
 
 		<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
-			<view class="cu-item" :class="index == selectIdx ? 'text-blue cur' : ''" v-for="(item, index) in 10" :key="index" @click="tabSelect" :data-id="index">
-				Tab{{ index }}
+			<view class="cu-item" :class="index == selectIdx ? 'text-blue cur' : ''" v-for="(item, index) in bodyParts" :key="index" @click="tabSelect" :data-id="index">
+				 {{ item }}
 			</view>
 		</scroll-view>
 
@@ -47,9 +47,9 @@
 							</view>
 						</view>
 						<view v-show="type === 'select'" class="numBox flex align-center">
-							<view @click.stop="item.num--" v-show="item.num > 0" class="less roundBox"><text class="cuIcon cuIcon-move text-bold"></text></view>
+							<view @click.stop="changeNum(1,index)" v-show="item.num > 0" class="less roundBox"><text class="cuIcon cuIcon-move text-bold"></text></view>
 							<view v-show="item.num > 0" class="num">{{ item.num }}</view>
-							<view @click.stop="item.num++" class="add roundBox bg-blue"><text class="cuIcon cuIcon-add text-bold"></text></view>
+							<view @click.stop="changeNum(2,index)" class="add roundBox bg-blue"><text class="cuIcon cuIcon-add text-bold"></text></view>
 						</view>
 					</view>
 					<view @click.stop="del(index)" class="move">
@@ -137,6 +137,15 @@ export default {
 		}
 	},
 	methods: {
+		changeNum(type,index){
+			let newObj = this.list[index]
+			if(type == 1){
+				newObj.num--
+			}else{
+				newObj.num++
+			}
+			this.list.splice(index,1,newObj)
+		},
 		saveSelect(){
 			uni.navigateBack({
 				delta:1

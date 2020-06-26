@@ -76,7 +76,8 @@
 	    ,{
             "path" : "pages/trainingPlan/trainingPlanDetail",
             "style" : {
-				"navigationBarTitleText": "训练计划详情"
+				// "navigationBarTitleText": "训练计划详情"
+				"navigationStyle": "custom"
 			}
         }
         ,{
@@ -103,6 +104,18 @@
 				"navigationBarTitleText": "开始上课",
 				"navigationBarTextStyle": "black",
 				"navigationBarBackgroundColor": "#FFFFFF"
+			}
+        }
+        ,{
+            "path" : "pages/trainingPlan/courseSummary",
+            "style" : {
+				"navigationBarTitleText": "课程总结"
+			}
+        }
+        ,{
+            "path" : "pages/trainingTemplate/trainingTemplateList",
+            "style" : {
+				"navigationStyle": "custom"
 			}
         }
     ],

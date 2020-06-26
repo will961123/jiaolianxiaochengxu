@@ -1,6 +1,16 @@
 <template>
 	<!-- 训练计划详情 -->
 	<view class="trainingPlanDetail">
+		<cu-custom bgColor="bg-myblack" :isBack="true">
+			<block slot="content">详情</block>
+			<block slot="right">
+				<text @click="gotoTemplate" class="addTemolate">
+					<text class="cuIcon cuIcon-share"></text>
+					导入模板
+				</text>
+			</block>
+		</cu-custom>
+
 		<view class="bg-img text-white padding-lr" style="background-image: url('https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg');height: 400rpx;">
 			<view class="className flex justify-between">
 				<text>陈可可的女性塑性训练计划</text>
@@ -44,23 +54,21 @@
 
 			<view
 				class="cu-item "
-				:class="modalName == 'move-box-' + (index+1) ? 'move-cur' : ''"
+				:class="modalName == 'move-box-' + (index + 1) ? 'move-cur' : ''"
 				@touchstart="ListTouchStart"
 				@touchmove="ListTouchMove"
 				@touchend="ListTouchEnd"
-				@click="gotoAddclass" 
-				v-for="(item,index) in 8"
+				@click="gotoAddclass"
+				v-for="(item, index) in 8"
 				:key="index"
-				:data-target="'move-box-'+(index+1)"
+				:data-target="'move-box-' + (index + 1)"
 			>
 				<view style="width: 90%;left: 40rpx;" class="content flex justify-between">
 					<view class="flex align-center">
-						<view style="width: 80rpx;" class="num">{{index+2}}</view>
+						<view style="width: 80rpx;" class="num">{{ index + 2 }}</view>
 						<view class="name text-gray">创建新训练课</view>
 					</view>
-					<view class="rowBox text-gray">
-						<text class="cuIcon cuIcon-right"></text>
-					</view>
+					<view class="rowBox text-gray"><text class="cuIcon cuIcon-right"></text></view>
 				</view>
 				<view @click.stop="del(index)" class="move">
 					<!-- <view class="bg-grey">置顶</view> -->
@@ -86,23 +94,29 @@ export default {
 	},
 
 	methods: {
-		// 查看课程详情
-		gotoClassDetail(){
+		gotoTemplate(){
 			uni.navigateTo({
-				url:'/pages/trainingPlan/classDetail'
+				url:"/pages/trainingTemplate/trainingTemplate"
 			})
+		},
+		
+		// 查看课程详情
+		gotoClassDetail() {
+			uni.navigateTo({
+				url: '/pages/trainingPlan/classDetail'
+			});
 		},
 		// 添加课程
-		gotoAddclass(){
+		gotoAddclass() {
 			uni.navigateTo({
-				url:'/pages/trainingTemplate/addTrainingClass'
-			})
+				url: '/pages/trainingTemplate/addTrainingClass'
+			});
 		},
 		// 添加训练计划
-		gotoAddPlan(){
+		gotoAddPlan() {
 			uni.navigateTo({
-				url:'/pages/trainingPlan/addTrainingPlan'
-			})
+				url: '/pages/trainingPlan/addTrainingPlan'
+			});
 		},
 		del(idx) {
 			uni.showModal({
@@ -121,7 +135,7 @@ export default {
 		},
 		// ListTouch计算滚动
 		ListTouchEnd(e) {
-			console.log( e.currentTarget.dataset.target)
+			console.log(e.currentTarget.dataset.target);
 			if (this.listTouchDirection == 'left') {
 				this.modalName = e.currentTarget.dataset.target;
 			} else {
@@ -135,6 +149,17 @@ export default {
 
 <style lang="scss">
 .trainingPlanDetail {
+	.addTemolate {
+		display: inline-block;
+		background-color: rgba(0, 0, 0, 0.3);
+		font-size: 28rpx;
+		margin-right: 14rpx;
+		line-height: 40rpx;
+		height: 40rpx;
+		padding: 0 15rpx;
+		border-radius: 20rpx;
+	}
+
 	.className {
 		line-height: 80rpx;
 	}

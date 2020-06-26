@@ -1,8 +1,8 @@
 <template>
 	<view class="trainingTemplateView">
-		<view v-for="(item,index) in list" :key="index" class="item flex align-center bg-white" >
-			<view class="label">{{item.type}}</view>
-			<text>{{item.name}}</text>
+		<view @click="gotoTemplateList" v-for="(item, index) in list" :key="index" class="item flex align-center bg-white">
+			<view class="label">{{ item.type }}</view>
+			<text>{{ item.name }}</text>
 		</view>
 
 		<view @click="gotoAddTemplate" class="btn cu-btn bg-blue">创建训练模板</view>
@@ -13,19 +13,21 @@
 export default {
 	data() {
 		return {
-			list:[
-				{name:'模板名称',type:'个人'},
-				{name:'模板名称',type:'团队'}
-			]
+			list: [{ name: '模板名称', type: '个人' }, { name: '模板名称', type: '团队' }]
 		};
 	},
-		methods:{
-			gotoAddTemplate(){
-				uni.navigateTo({
-					url:'./addTrainingTemplate'
-				})
-			}
+	methods: {
+		gotoTemplateList() {
+			uni.navigateTo({
+				url: '/pages/trainingTemplate/trainingTemplateList'
+			});
+		},
+		gotoAddTemplate() {
+			uni.navigateTo({
+				url: './addTrainingTemplate'
+			});
 		}
+	}
 };
 </script>
 
@@ -37,7 +39,7 @@ export default {
 		font-size: 28rpx;
 		padding: 35rpx 30rpx;
 		border-bottom: 1rpx solid #ededed;
-		&:last-child{
+		&:last-child {
 			border-bottom: none;
 		}
 		.label {

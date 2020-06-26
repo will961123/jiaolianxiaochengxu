@@ -51,8 +51,9 @@
 			</view>
 			<view class="item flex align-center justify-between">
 				<view class="name">阻力</view>
-				<view @tap="showModal" data-target="Resistance" class="right text-right " style="width: 40%;">
-					<text class=" text-gray">请选择</text>
+				<view @tap="showModal" data-target="Resistance" class="right text-right  flex align-center" style="width: 40%;">
+					<!-- <text class=" text-gray">请选择</text> -->
+					<input type="text" :disabled="true" :value="resistance" placeholder="请选择" />
 					<text class="cuIcon  cuIcon-right text-gray"></text>
 				</view>
 			</view>
@@ -167,13 +168,13 @@
 			<view style="padding: 0;" class="cu-dialog bg-white" @tap.stop="">
 				<view class="iptbox2">
 					<view class="resistanceTypeList flex">
-						<view @click="resistanceType = index" v-for="(item, index) in resistanceTypeList" :key="index" :class="index === resistanceType ? 'item select' : 'item'">
+						<view @click.stop="changeResistanceType(index)" v-for="(item, index) in resistanceTypeList" :key="index" :class="index === resistanceType ? 'item select' : 'item'">
 							{{ item }}
 						</view>
 					</view>
 					<view class="ipt bg-white flex align-center justify-between">
 						<input v-model="resistance" type="digit" placeholder="请输入" />
-						<view @click="hideModal" class="text-blue">确定</view>
+						<view @tap.stop="hideModal" class="text-blue">确定</view>
 					</view>
 				</view>
 			</view>
@@ -197,7 +198,7 @@
 				<view class="iptbox2">
 					<view class="ipt bg-white flex align-center justify-between">
 						<input v-model="labelStr" type="text" placeholder="+新建标签" />
-						<view @click="addLabelObj" class="text-blue">确定</view>
+						<view @tap.stop="addLabelObj" class="text-blue">确定</view>
 					</view>
 				</view>
 			</view>
@@ -324,6 +325,9 @@ export default {
 	},
 
 	methods: {
+		changeResistanceType(type){
+			this.resistanceType = type
+		},
 		save(){
 			uni.navigateBack({
 				delta:1

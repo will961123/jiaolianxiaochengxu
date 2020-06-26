@@ -45,7 +45,7 @@ export default {
 			})
 		},
 		bindPickerChange(e) {
-			formData.groupType = e.detail.value;
+			this.formData.groupType = e.detail.value;
 		}
 	}
 };

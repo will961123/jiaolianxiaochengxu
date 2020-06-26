@@ -292,7 +292,7 @@ export default {
 			text-align: left;
 			.banner {
 				width: 100%;
-				height: 240px;
+				height: 400rpx;
 				background-color: #1a8ee9;
 				position: relative;
 				& > image {

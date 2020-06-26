@@ -109,7 +109,7 @@
 				<view v-show="showAddIpt" class="iptbox">
 					<view class="ipt bg-white flex align-center justify-between">
 						<input v-model="addApparatuStr" type="text" placeholder="请输入" />
-						<view @click="saveNewAddStr" class="text-blue">确定</view>
+						<view @click.stop="saveNewAddStr" class="text-blue">确定</view>
 					</view>
 				</view>
 			</view>
@@ -120,13 +120,13 @@
 			<view style="padding: 0;" class="cu-dialog bg-white" @tap.stop="">
 				<view class="iptbox2">
 					<view class="resistanceTypeList flex">
-						<view @click.stop="resistanceType = index" v-for="(item, index) in resistanceTypeList" :key="index" :class="index === resistanceType ? 'item select' : 'item'">
+						<view @click.stop="changeResistanceType(index)" v-for="(item, index) in resistanceTypeList" :key="index" :class="index === resistanceType ? 'item select' : 'item'">
 							{{ item }}
 						</view>
 					</view>
 					<view class="ipt bg-white flex align-center justify-between">
 						<input v-model="resistance" type="digit" placeholder="请输入" />
-						<view @click="saveKgChange" class="text-blue">确定</view>
+						<view @click.stop="saveKgChange" class="text-blue">确定</view>
 					</view>
 				</view>
 			</view>
@@ -138,7 +138,7 @@
 				<view class="iptbox2">
 					<view class="ipt bg-white flex align-center justify-between">
 						<input v-model="restValue" type="number" placeholder="请输入" />
-						<view @click="saveRestChange" class="text-blue">确定</view>
+						<view @click.stop="saveRestChange" class="text-blue">确定</view>
 					</view>
 				</view>
 			</view>
@@ -263,6 +263,9 @@ export default {
 		];
 	},
 	methods: {
+		changeResistanceType(type){
+			this.resistanceType = type
+		},
 		// 添加一项
 		addOneItem(e) { 
 			this.detailInfo[e.currentTarget.dataset.key][e.currentTarget.dataset.addidx1].list.push(

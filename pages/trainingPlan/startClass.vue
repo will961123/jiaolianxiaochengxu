@@ -4,7 +4,7 @@
 			<view class="menuBox flex align-center justify-end">
 				<text class="margin-right-lg">{{ fillterTime }}</text>
 				<button class="btn cu-btn bg-blue sm margin-right-lg">关联预约记录</button>
-				<button class="btn cu-btn bg-red sm margin-right-lg">结束</button>
+				<button @click="stop" class="btn cu-btn bg-red sm margin-right-lg">结束</button>
 			</view>
 			<view class="userBox flex">
 				<view class="headBox"><image src="/static/logo.png" mode="aspectFill"></image></view>
@@ -141,7 +141,7 @@
 				<view class="iptbox2">
 					<view class="resistanceTypeList flex">
 						<view
-							@click.stop="resistanceType = index"
+							@click.stop="chnageResistanceType(index)"
 							v-for="(item, index) in resistanceTypeList"
 							:key="index"
 							:class="index === resistanceType ? 'item select' : 'item'"
@@ -237,11 +237,7 @@ export default {
 		query
 			.select('#scrollView')
 			.boundingClientRect(data => {
-				this.scrollViewHeight = `calc(100vh - ${data.top.toFixed(2)}px)`;
-				console.log(this.type);
-				if (this.type === 'select') {
-					this.scrollViewHeight = `calc(100vh - ${data.top.toFixed(2)}px - 50px)`;
-				}
+				this.scrollViewHeight = `calc(100vh - ${data.top.toFixed(2)}px - 50px)`; 
 			})
 			.exec();
 	},
@@ -307,6 +303,14 @@ export default {
 		clearInterval(timer);
 	},
 	methods: {
+		stop(){
+			uni.navigateTo({
+				url:'/pages/trainingPlan/courseSummary'
+			})
+		},
+		chnageResistanceType(type){
+			this.resistanceType = type
+		},
 		ChooseImage() {
 			uni.chooseImage({
 				count: 1, //默认9
