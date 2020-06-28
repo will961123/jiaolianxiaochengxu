@@ -45,11 +45,12 @@
 
 				<view
 					v-for="(item, index) in list"
+					
 					:key="index"
 					:class="index <= 1 ? 'itemyellow' : index <= 3 ? 'itemblue' : index <= 5 ? 'itempurple' : 'itemyellow'"
 					class="item"
 				>
-					<view class="itemcontent bg-grey flex justify-between align-center text-black">
+					<view @click="changeShowChilder(index)" class="itemcontent bg-grey flex justify-between align-center text-black">
 						<view class="flex align-center">
 							<text class="margin-left-sm">{{ item.name }}</text>
 							<text class="margin-left-sm">{{ item.num }}</text>
@@ -66,6 +67,27 @@
 									mode="aspectFill"
 								></image>
 								<image v-show="item.userType != -1" :src="'/static/pic' + item.userType + '.png'" mode="aspectFill"></image>
+							</view>
+						</view>
+					</view>
+					<view v-show="item.showChilder" v-for="(childer,cidx) in item.childerPic" :key="cidx" class="itemDetail flex justify-between align-center">
+						<view class="detailBox">
+							<text>3次</text>
+							<text>--</text>
+							<text>--</text>
+							<text>无器械</text>
+						</view>
+						<view class="picBox2">
+							<view class="flex align-center">
+								<image
+									@click.stop="changeUserType(index, idx,2,cidx)"
+									v-show="childer == -1"
+									v-for="(pic, idx) in 3"
+									:key="idx"
+									:src="'/static/pic' + (idx + 1) + '.png'"
+									mode="aspectFill"
+								></image>
+								<image v-show="childer != -1" :src="'/static/pic' + childer + '.png'" mode="aspectFill"></image>
 							</view>
 						</view>
 					</view>
@@ -111,16 +133,12 @@
 						</view>
 					</view>
 				</view>
-				
-				<view class="userDesc">
-					<textarea value="" placeholder="说说你的感受" />
-				</view>
+
+				<view class="userDesc"><textarea value="" placeholder="说说你的感受" /></view>
 			</view>
 		</view>
-		
-		<view class="btn bg-blue text-center">
-			确定
-		</view>
+
+		<view class="btn bg-blue text-center">确定</view>
 	</view>
 </template>
 
@@ -129,12 +147,12 @@ export default {
 	data() {
 		return {
 			list: [
-				{ name: '伸展', num: '4/4组', dot: false, userType: 1 },
-				{ name: '伸展', num: '4/4组', dot: false, userType: 2 },
-				{ name: '伸展', num: '4/4组', dot: true, userType: 3 },
-				{ name: '伸展', num: '4/4组', dot: true, userType: -1 },
-				{ name: '伸展', num: '4/4组', dot: true, userType: -1 },
-				{ name: '伸展', num: '4/4组', dot: true, userType: -1 }
+				{ name: '伸展', num: '4/4组', dot: false, userType: 1 ,childerPic:[-1,-1,-1],showChilder:true},
+				{ name: '伸展', num: '4/4组', dot: false, userType: 2 ,childerPic:[-1,-1,-1],showChilder:false},
+				{ name: '伸展', num: '4/4组', dot: true, userType: 3 ,childerPic:[-1,-1,-1],showChilder:false},
+				{ name: '伸展', num: '4/4组', dot: true, userType: -1 ,childerPic:[-1,-1,-1],showChilder:false},
+				{ name: '伸展', num: '4/4组', dot: true, userType: -1 ,childerPic:[-1,-1,-1],showChilder:false},
+				{ name: '伸展', num: '4/4组', dot: true, userType: -1 ,childerPic:[-1,-1,-1],showChilder:false}
 			],
 			picList: [
 				{
@@ -153,6 +171,9 @@ export default {
 		};
 	},
 	methods: {
+		changeShowChilder(idx){
+			this.list[idx].showChilder = !this.list[idx].showChilder
+		},
 		bindPickerChange(e, type) {
 			switch (type) {
 				case 1:
@@ -166,9 +187,18 @@ export default {
 					break;
 			}
 		},
-		changeUserType(index, idx) {
+		changeUserType(index, idx,type,cidx) {
 			let newObj = this.list[index];
-			newObj.userType = Number(idx) + 1;
+			if(type === 2){
+				// 第几个课程 第几个表情 第几个课程详情
+				console.log(index,idx,cidx)
+				newObj.childerPic[cidx] =  Number(idx)  +1
+				newObj.userType = Number(idx) + 1;
+				
+			}else{
+				newObj.userType = Number(idx) + 1;
+			}
+			
 			this.list.splice(index, 1, newObj);
 		}
 	}
@@ -177,7 +207,7 @@ export default {
 
 <style lang="scss">
 .courseSummaryView {
-	padding-bottom: 50px;
+	padding-bottom: 70px;
 	background-color: #fff;
 	.descView {
 		width: 100%;
@@ -206,9 +236,9 @@ export default {
 		padding: 45rpx 30rpx;
 		color: #fff;
 		.headBox {
-			width: 130rpx;
-			height: 130rpx;
-			line-height: 130rpx;
+			width: 110rpx;
+			height: 110rpx;
+			line-height: 110rpx;
 			text-align: center;
 			font-size: 32rpx;
 			margin-right: 40rpx;
@@ -251,6 +281,13 @@ export default {
 			image {
 				width: 34rpx;
 				height: 34rpx;
+			}
+		}
+		.userType,
+		.time,
+		.date {
+			& > text {
+				margin-right: 8rpx;
 			}
 		}
 	}
@@ -315,6 +352,31 @@ export default {
 				}
 			}
 		}
+		.itemDetail{
+			height: 60px;
+			padding:0 25rpx 0  15rpx;
+			.detailBox{
+				&>text{ 
+					font-size: 28rpx;
+					box-sizing: content-box;
+					display: inline-block;
+					padding: 0 1.2em;
+					border-right: 1rpx solid #999;
+					&:last-child{
+						border: none;
+					}
+				}
+			}
+			.picBox2 {
+				
+				image {
+					width: 32rpx;
+					height: 32rpx;
+					margin-right: 14rpx;
+				}
+			}
+		}
+		
 	}
 
 	.userSave {
@@ -322,7 +384,7 @@ export default {
 		.tit {
 			line-height: 20px;
 		}
-		.box { 
+		.box {
 			padding: 30rpx;
 			border-radius: 8rpx;
 			.item {
@@ -356,8 +418,8 @@ export default {
 				}
 			}
 		}
-		.userDesc{
-			textarea{
+		.userDesc {
+			textarea {
 				width: calc(100% - 50rpx);
 				margin: 0 auto;
 				border-radius: 8rpx;
@@ -368,11 +430,11 @@ export default {
 			}
 		}
 	}
-	
-	.btn{
+
+	.btn {
 		width: 100%;
-		height: 34px;
-		line-height: 34px;
+		height: 60px;
+		line-height: 60px;
 		position: fixed;
 		left: 0;
 		bottom: 0;

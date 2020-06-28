@@ -1,23 +1,24 @@
 <template>
 	<!-- 添加训练课 -->
 	<view class="addTrainingClassView">
-		<cu-custom bgColor="bg-myblack" :isBack="true">
+		<!-- <cu-custom bgColor="bg-myblack" :isBack="true">
 			<block slot="content">编辑课程</block>
-			<block slot="right">
-				<text style="margin-right: 25rpx;">保存</text>
-			</block>
-		</cu-custom>
+			<block slot="right"><text style="margin-right: 25rpx;">保存</text></block>
+		</cu-custom> -->
+	<!-- 	<view class="topBox">
+			<text  >保存</text>
+		</view> -->
 		<view class="title bg-white flex align-center"><input type="text" value="" placeholder="请输入训练主题" /></view>
 		<view class="section bg-white">
 			<view class="titBox flex justify-between align-center">
 				<view class="flex align-center">
 					<view style="background-color: #fdb146;" class="label "></view>
 					<view class="tit">热身训练</view>
-				</view> 
+				</view>
 			</view>
 
 			<view v-for="(item, index) in detailInfo.warmUp" :key="index" class="listBox">
-				<view class="list flex justify-between align-center">
+				<view @click="changeShowChilder" :data-idx="index" data-key="warmUp" class="list flex justify-between align-center">
 					<view class="flex align-center">
 						<view class="name">{{ item.name }}</view>
 						<view class="num flex">
@@ -30,7 +31,8 @@
 							</view>
 						</view>
 					</view>
-					<view @click="item.select = !item.select" :class="item.select ? 'cuIcon-fold' : 'cuIcon-unfold'" class="cuIcon "></view>
+
+					<view @click="changeShowChilder" :data-idx="index" data-key="warmUp" :class="item.select ? 'cuIcon-fold' : 'cuIcon-unfold'" class="cuIcon "></view>
 				</view>
 				<view v-show="item.select" class="parameterBox">
 					<view v-for="(itm, idx) in item.list" :key="idx" class="item">
@@ -62,7 +64,7 @@
 				<view class="flex align-center">
 					<view style="background-color: #4bd3c4;" class="label  "></view>
 					<view class="tit">正式训练</view>
-				</view> 
+				</view>
 			</view>
 			<view @click="gotoActionLibrary" class="addBox text-blue">
 				<text class="cuIcon cuIcon-add"></text>
@@ -75,12 +77,16 @@
 				<view class="flex align-center">
 					<view style="background-color: #799bf1;" class="label  "></view>
 					<view class="tit">放松整理</view>
-				</view> 
+				</view>
 			</view>
 			<view @click="gotoActionLibrary" class="addBox text-blue">
 				<text class="cuIcon cuIcon-add"></text>
 				添加动作
 			</view>
+		</view>
+		
+		<view   class="btn bg-blue">
+			保存
 		</view>
 
 		<!-- 可选器械 -->
@@ -120,12 +126,17 @@
 			<view style="padding: 0;" class="cu-dialog bg-white" @tap.stop="">
 				<view class="iptbox2">
 					<view class="resistanceTypeList flex">
-						<view @click.stop="changeResistanceType(index)" v-for="(item, index) in resistanceTypeList" :key="index" :class="index === resistanceType ? 'item select' : 'item'">
+						<view
+							@click.stop="changeResistanceType(index)"
+							v-for="(item, index) in resistanceTypeList"
+							:key="index"
+							:class="index === resistanceType ? 'item select' : 'item'"
+						>
 							{{ item }}
 						</view>
 					</view>
 					<view class="ipt bg-white flex align-center justify-between">
-						<input v-model="resistance" type="digit" placeholder="请输入" />
+						<input :focus="focus" v-model="resistance" type="digit" placeholder="请输入" />
 						<view @click.stop="saveKgChange" class="text-blue">确定</view>
 					</view>
 				</view>
@@ -137,7 +148,7 @@
 			<view style="padding: 0;" class="cu-dialog bg-white" @tap.stop="">
 				<view class="iptbox2">
 					<view class="ipt bg-white flex align-center justify-between">
-						<input v-model="restValue" type="number" placeholder="请输入" />
+						<input :focus="focus2" v-model="restValue" type="number" placeholder="请输入" />
 						<view @click.stop="saveRestChange" class="text-blue">确定</view>
 					</view>
 				</view>
@@ -150,6 +161,8 @@
 export default {
 	data() {
 		return {
+			focus: false,
+			focus2: false,
 			numList: [[], ['次', '分', '秒']],
 			detailInfo: {
 				warmUp: [
@@ -263,11 +276,15 @@ export default {
 		];
 	},
 	methods: {
-		changeResistanceType(type){
-			this.resistanceType = type
+		changeShowChilder(e) {  
+			this.detailInfo[e.currentTarget.dataset.key][e.currentTarget.dataset.idx].select = !this.detailInfo[e.currentTarget.dataset.key][e.currentTarget.dataset.idx].select;
+		},
+		changeResistanceType(type) {
+			this.resistanceType = type;
+			this.focus = true;
 		},
 		// 添加一项
-		addOneItem(e) { 
+		addOneItem(e) {
 			this.detailInfo[e.currentTarget.dataset.key][e.currentTarget.dataset.addidx1].list.push(
 				this.detailInfo[e.currentTarget.dataset.key][e.currentTarget.dataset.addidx1].list[
 					this.detailInfo[e.currentTarget.dataset.key][e.currentTarget.dataset.addidx1].list.length - 1
@@ -312,7 +329,7 @@ export default {
 				this.showAddIpt = true;
 				return false;
 			}
-			
+
 			// 所有器材列表索引
 			console.log(index, idx, id);
 			// 修改哪一条数据索引
@@ -335,9 +352,18 @@ export default {
 			this.restKey = e.currentTarget.dataset.key;
 			this.restIdx1 = e.currentTarget.dataset.restidx1;
 			this.restIdx2 = e.currentTarget.dataset.restidx2;
+			
+			if (this.modalName === 'Resistance') {
+				this.focus = true;
+			} else if (this.modalName === 'Rest') {
+				this.focus2 = true;
+			}
+			
 		},
 		hideModal(e) {
 			this.modalName = null;
+			this.focus = false;
+			this.focus2 = false;
 		},
 		bindPickerChange(e, type, key, idx1, idx2) {
 			console.log(e);
@@ -369,6 +395,15 @@ export default {
 
 <style lang="scss">
 .addTrainingClassView {
+	padding-bottom: 65px;
+	.topBox{
+		font-size: 34rpx;
+		padding-right: 25rpx;
+		background-color: #4c515f;
+		line-height: 30px;
+		color: #fff;
+		text-align: right;
+	}
 	& > .title {
 		height: 50px;
 		padding: 0 30rpx;
@@ -539,7 +574,8 @@ export default {
 				.ipt {
 					padding: 0 25rpx;
 					width: 100%;
-					height: 44px;
+					// height: 44px;
+					height: 56px;
 					input {
 						height: 100%;
 						flex: 1;
@@ -576,6 +612,17 @@ export default {
 				}
 			}
 		}
+	}
+	.btn{
+		width: 100%;
+		position: fixed;
+		left: 50%;
+		transform: translate(-50%);
+		bottom: 0px;
+		height: 60px;
+		line-height: 60px;
+		text-align: center; 
+		margin: 0 auto;
 	}
 }
 </style>

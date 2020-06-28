@@ -173,7 +173,7 @@
 						</view>
 					</view>
 					<view class="ipt bg-white flex align-center justify-between">
-						<input v-model="resistance" type="digit" placeholder="请输入" />
+						<input :focus="focus" v-model="resistance" type="digit" placeholder="请输入" />
 						<view @tap.stop="hideModal" class="text-blue">确定</view>
 					</view>
 				</view>
@@ -212,6 +212,8 @@
 export default {
 	data() {
 		return {
+			focus: false,
+			focus2: false,
 			groupsNumList: [], // 组数
 			oneGroupNumList: [], // 每组次数
 			oneGroupTimeList: [], // 每组时间
@@ -326,7 +328,14 @@ export default {
 
 	methods: {
 		changeResistanceType(type){
-			this.resistanceType = type
+			this.resistanceType = type 
+			this.focus = true;
+			setTimeout(()=>{ 
+				this.focus = false;
+				this.focus = true;
+			},300)
+			console.log(this.focus)
+			
 		},
 		save(){
 			uni.navigateBack({
@@ -394,9 +403,16 @@ export default {
 		},
 		showModal(e) {
 			this.modalName = e.currentTarget.dataset.target;
+			if (this.modalName === 'Resistance') {
+				this.focus = true;
+			} else if (this.modalName === 'Rest') {
+				this.focus2 = true;
+			}
 		},
 		hideModal(e) {
 			this.modalName = null;
+			this.focus = false;
+			this.focus2 = false;
 		},
 		ChooseCheckbox(e) {
 			let items = this.checkbox;
@@ -437,7 +453,7 @@ export default {
 
 <style lang="scss">
 .addActionView {
-	padding-bottom: 44px;
+	padding-bottom: 64px;
 	.section {
 		.item {
 			padding: 0 30rpx;
@@ -564,7 +580,7 @@ export default {
 	.btn {
 		border-radius: 0;
 		width: 100%;
-		height: 44px;
+		height: 60px;
 		position: fixed;
 		left: 0;
 		bottom: 0;

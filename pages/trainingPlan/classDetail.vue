@@ -76,6 +76,8 @@
 export default {
 	data() {
 		return {
+			focus: false,
+			focus2: false,
 			detailInfo: {
 				warmUp: [
 					{
@@ -119,9 +121,17 @@ export default {
 		},
 		showModal(e) {
 			this.modalName = e.currentTarget.dataset.target;
+			if (this.modalName === 'Resistance') {
+				this.focus = true;
+			} else if (this.modalName === 'Rest') {
+				this.focus2 = true;
+			}
 		},
 		hideModal(e) { 
 			this.modalName = null;
+			this.focus = false;
+			this.focus2 = false;
+
 		}
 	}
 };

@@ -50,9 +50,9 @@
 			<swiper-item>
 				<view class="canvasDataBox flex justify-between ">
 					<view class="left  flex flex-direction justify-between">
-						<view class="itemTitle">当前剩余/总课时</view>
-						<view class="numBox">
-							<text class="num">{{ canvasData.page2.nowNum }}</text>
+						<view class="itemTitle">当前剩余/总课时</view> 
+						<view class="numBox"  style="margin-bottom: 66rpx;" >
+							<text class="num" style="font-size: 44rpx;" >{{ canvasData.page2.nowNum }}</text>
 							<text>{{ '/' + canvasData.page2.totStudyNum }}节</text>
 						</view>
 					</view>
@@ -77,7 +77,7 @@
 
 		<view :style="{ top: 0 + 40 + 'px' }" class="typeBox sticky-box flex justify-between align-center">
 			<view class="title">总会员 {{userList[selectType].length}} 人</view>
-			<view>
+			<view style="width: 55%;" class="flex align-center justify-between" >
 				<view @click="selectType = 0" :class="selectType === 0 ? 'item select' : 'item'">
 					当前
 					<br />
@@ -111,7 +111,7 @@
 					</view>
 				</view>
 
-				<view class="numBox flex align-center">
+				<view class="numBox flex align-center justify-between">
 					<view class="num">{{ item.tot }}</view>
 					<view class="num">{{ item.now }}</view>
 					<view class="num">{{ item.use }}</view>
@@ -431,7 +431,7 @@ export default {
 	}
 
 	.swiper {
-		height: 400rpx;
+		height: 380rpx;
 
 		.canvasDataBox {
 			padding: 40rpx 15rpx 0 35rpx;
@@ -453,7 +453,7 @@ export default {
 				}
 			}
 			.left {
-				width: 300rpx;
+				width: 280rpx;
 				.numBox {
 					font-size: 24rpx;
 					color: #999;
@@ -481,7 +481,7 @@ export default {
 					background-color: #ffffff;
 				}
 				.legendBox {
-					font-size: 22rpx;
+					font-size: 20rpx;
 					height: 160rpx;
 					flex: 1;
 					.item {
@@ -493,7 +493,8 @@ export default {
 							content: '';
 							position: absolute;
 							left: 0;
-							top: 4rpx;
+							top: 50%;
+							transform: translateY(-50%);
 						}
 						&.yellow {
 							&::after {
@@ -522,13 +523,13 @@ export default {
 		font-size: 28rpx;
 		color: #a4a4a4;
 
-		.item {
+		.item { 
 			font-size: 22rpx;
 			border-radius: 40rpx;
 			display: inline-block;
 			padding: 4px 20rpx;
 			text-align: center;
-			margin-left: 4px;
+			// margin-left: 4px;
 			line-height: 1.2em;
 			// letter-spacing: 4rpx;
 			&.select {
@@ -572,11 +573,15 @@ export default {
 				}
 			}
 			.numBox {
-				flex: 1;
-				margin-left: 40rpx;
+				// flex: 1;
+				width: 55%;
+				// margin-left: 40rpx;
 				font-size: 28rpx;
+				padding-right: 15rpx;
 				.num {
-					width: 32%;
+					// flex: 1;
+					width: 30%; 
+					// width: 32%;
 					text-align: center;
 				}
 			}

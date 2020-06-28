@@ -6,7 +6,7 @@
 				<text class="cuIcon-search"></text>
 				<input type="text" placeholder="输入搜索的关键词" confirm-type="search" />
 			</view>
-			<view class="action"><button class="cu-btn bg-gradual-green shadow-blur round">搜索</button></view>
+			<view class="action"><button class="cu-btn bg-blue  round">搜索</button></view>
 		</view>
 		<scroll-view
 			scroll-y
@@ -22,14 +22,20 @@
 					<view class="cu-list menu-avatar no-padding">
 						<view @click="gotoUserPlanList" class="cu-item" v-for="(items, sub) in item.list" :key="sub">
 							<view class="cu-avatar  round lg " style="font-size: 28rpx;position: absolute;background-color: #26b9a0;">
-								{{ items.name[items.name.length - 2] }}{{ items.name[items.name.length - 1] }}
-								<view :class="items.sex === 1 ? 'bg-blue' : 'bg-red'" class="sexBox flex align-center justify-between">
+								<view class="flex" >
+									<text>{{ items.name[items.name.length - 2] }}{{ items.name[items.name.length - 1] }}</text>
+								
+								</view>
+								<view :class="items.sex === 1 ? 'bg-blue' : 'bg-red'" class="sexBox flex align-center justify-center">
 									<image :src="'/static/sex' + items.sex + '.png'" mode="widthFix"></image>
 								</view>
 							</view>
 							<view class="content">
-								<view class="text-grey">
-									<text class="text-abc">{{ items.name }}</text>
+								<view class="text-grey"> 
+									<text class="text-abc text-black">{{ items.name }}</text>
+									<view class="IdBox text-blue">
+										12345678
+									</view>
 								</view>
 								<view class="text-gray text-sm">{{ items.phone }}</view>
 							</view>
@@ -216,6 +222,13 @@ movable-view.indexBar-item::before {
 	line-height: 100upx;
 	text-align: center;
 	font-size: 48upx;
+}
+.IdBox{
+	background-color: #d9e3fe;
+	color: #0081ffbf;
+	padding: 0 8rpx;
+	margin-left: 30rpx;
+	font-size: 28rpx;
 }
 .sexBox {
 	position: absolute;

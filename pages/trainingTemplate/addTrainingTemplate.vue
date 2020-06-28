@@ -21,6 +21,13 @@
 			<input type="text" style="text-align: left;" value="" placeholder="请输入模板说明" />
 		</view>
 
+		<view class="temList bg-white">
+			<view @click="gotoAddTrainingClass" class="item flex justify-between ">
+				<view class="idx">1</view>
+				<view class="name">测试</view>
+				<view class="cuIcon cuIcon-right"></view>
+			</view>
+		</view>
 		<view @click="gotoAddTrainingClass" class="btn">
 			<text class="cuIcon cuIcon-roundaddfill text-blue margin-right-xs"></text>
 			添加训练课
@@ -39,10 +46,10 @@ export default {
 		};
 	},
 	methods: {
-		gotoAddTrainingClass(){
+		gotoAddTrainingClass() {
 			uni.navigateTo({
-				url:"/pages/trainingTemplate/addTrainingClass"
-			})
+				url: '/pages/trainingTemplate/addTrainingClass'
+			});
 		},
 		bindPickerChange(e) {
 			this.formData.groupType = e.detail.value;
@@ -75,12 +82,26 @@ export default {
 			font-size: 28rpx;
 		}
 	}
-	
-	.btn{
+	.temList {
+		margin-top: 14px;
+		padding: 0 30rpx;
+		.item {
+			line-height: 50px;
+			border-bottom: 1rpx solid #ededed;
+			.idx{
+				font-weight: 700;
+				font-size: 38rpx;
+				color: #000;
+			}
+			.name{
+				color: #000;
+			}
+		}
+	}
+	.btn {
 		line-height: 50px;
 		text-align: center;
 		background-color: #fff;
-		margin-top: 14px;
 		font-size: 32rpx;
 	}
 }

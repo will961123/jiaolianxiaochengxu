@@ -18,7 +18,8 @@
 		}, {
 			"path": "pages/actionLibrary/actionLibrary",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "动作库"
+				// "navigationStyle": "custom"
 			}
 		},
 		{
@@ -39,7 +40,8 @@
 		}, {
 			"path": "pages/actionLibrary/actionDetail",
 			"style": {
-				"navigationStyle": "custom"
+				// "navigationStyle": "custom",
+				"navigationBarTitleText": "动作详情"
 			}
 		}, {
 			"path": "pages/trainingTemplate/trainingTemplate",
@@ -54,8 +56,8 @@
 		}, {
 			"path": "pages/trainingTemplate/addTrainingClass",
 			"style": {
-				// "navigationBarTitleText": "编辑课程"
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "编辑课程"
+				// "navigationStyle": "custom"
 			}
 		}, {
 			"path": "pages/trainingPlan/chooseUser",
@@ -76,8 +78,8 @@
 	    ,{
             "path" : "pages/trainingPlan/trainingPlanDetail",
             "style" : {
-				// "navigationBarTitleText": "训练计划详情"
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "详情"
+				// "navigationStyle": "custom"
 			}
         }
         ,{
@@ -101,9 +103,9 @@
         ,{
             "path" : "pages/trainingPlan/startClass",
             "style" : {
-				"navigationBarTitleText": "开始上课",
-				"navigationBarTextStyle": "black",
-				"navigationBarBackgroundColor": "#FFFFFF"
+				"navigationBarTitleText": "开始上课"
+				// "navigationBarTextStyle": "black",
+				// "navigationBarBackgroundColor": "#FFFFFF"
 			}
         }
         ,{
@@ -115,7 +117,8 @@
         ,{
             "path" : "pages/trainingTemplate/trainingTemplateList",
             "style" : {
-				"navigationStyle": "custom"
+				// "navigationStyle": "custom"
+				"navigationBarTitleText": "模板列表"
 			}
         }
     ],

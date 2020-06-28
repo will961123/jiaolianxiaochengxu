@@ -87,6 +87,14 @@ export default {
 				{
 					pic: '/static/pic3.png',
 					show: true
+				},
+				{
+					pic: '/static/pic4.png',
+					show: true
+				},
+				{
+					pic: '/static/pic5.png',
+					show: true
 				}
 			],
 			ckecked:false,
@@ -217,8 +225,8 @@ page {
 		left: 50%;
 		transform: translate(-50%);
 		bottom: 0px;
-		height: 50px;
-		line-height: 50px;
+		height: 60px;
+		line-height: 60px;
 		text-align: center; 
 		margin: 0 auto;
 	}

@@ -1,11 +1,11 @@
 <template>
 	<view class="changeStoreView">
 		<!-- <cu-custom bgColor="bg-myblack" :isBack="true"><block slot="content">切换团队</block></cu-custom> -->
-		<view v-for="(item, index) in stortList" :key="index" :class="[index === selectIdx ? 'select' : '', 'item flex align-center justify-between bg-white select']">
+		<view @click="changeStore(index)" v-for="(item, index) in stortList" :key="index" :class="[index === selectIdx ? 'select' : '', 'item flex align-center justify-between bg-white select']">
 			<text :class="index === selectIdx ? 'storeName text-blue' : 'storeName'">{{ item.name }}</text>
 			<radio-group>
 				<label class="radio">
-					<radio @click="changeStore(index)" :value="'' + index" :checked="index === selectIdx" :class="index === selectIdx ? 'checked blue' : 'blue'" />
+					<radio  :value="'' + index" :checked="index === selectIdx" :class="index === selectIdx ? 'checked blue' : 'blue'" />
 				</label>
 			</radio-group>
 		</view>

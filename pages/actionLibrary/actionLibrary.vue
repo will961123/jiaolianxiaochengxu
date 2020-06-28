@@ -1,21 +1,22 @@
 <template>
 	<!-- 动作库 -->
 	<view class="actionLibraryView">
-		<cu-custom bgColor="bg-myblack" :isBack="true">
+		<!-- 	<cu-custom bgColor="bg-myblack" :isBack="true">
 			<block slot="content">动作库</block>
-			<block slot="right"><text @click="gotoAddAction" style="font-size: 18px;font-weight: 700;margin-right: 14px;" class="cuIcon cuIcon-add"></text></block>
-		</cu-custom>
-		<view class="searchBox bg-white">
-			<view class="iptBox flex align-center">
+			  <block slot="right"><text style="font-size: 18px;font-weight: 700;margin-right: 14px;" class="cuIcon cuIcon-add"></text></block>  
+		</cu-custom> -->
+		<view class="searchBox bg-white flex align-center">
+			<view class="iptBox flex   align-center">
 				<text class="cuIcon cuIcon-search"></text>
 				<input type="text" placeholder="搜索动作" />
 				<text class="btn">搜索</text>
 			</view>
+			<button @click="gotoAddAction" class="cu-btn bg-blue  round">添加</button>
 		</view>
 
 		<scroll-view scroll-x class="bg-white nav" scroll-with-animation :scroll-left="scrollLeft">
 			<view class="cu-item" :class="index == selectIdx ? 'text-blue cur' : ''" v-for="(item, index) in bodyParts" :key="index" @click="tabSelect" :data-id="index">
-				 {{ item }}
+				{{ item }}
 			</view>
 		</scroll-view>
 
@@ -47,9 +48,9 @@
 							</view>
 						</view>
 						<view v-show="type === 'select'" class="numBox flex align-center">
-							<view @click.stop="changeNum(1,index)" v-show="item.num > 0" class="less roundBox"><text class="cuIcon cuIcon-move text-bold"></text></view>
+							<view @click.stop="changeNum(1, index)" v-show="item.num > 0" class="less roundBox"><text class="cuIcon cuIcon-move text-bold"></text></view>
 							<view v-show="item.num > 0" class="num">{{ item.num }}</view>
-							<view @click.stop="changeNum(2,index)" class="add roundBox bg-blue"><text class="cuIcon cuIcon-add text-bold"></text></view>
+							<view @click.stop="changeNum(2, index)" class="add roundBox bg-blue"><text class="cuIcon cuIcon-add text-bold"></text></view>
 						</view>
 					</view>
 					<view @click.stop="del(index)" class="move">
@@ -65,7 +66,7 @@
 				动作数量：
 				<text class="num text-blue">{{ selectNum }}</text>
 			</view>
-		<!-- 	<view class="rowBox flex1">
+			<!-- 	<view class="rowBox flex1">
 				内容
 				<text class="cuIcon margin-left-sm cuIcon-unfold"></text>
 			</view> -->
@@ -107,11 +108,10 @@ export default {
 				{ name: '牛角包', logo: '', bodyParts: ['躯干'], num: 0 }
 			],
 
-			type: '',
-			 
+			type: ''
 		};
 	},
-	computed: { 
+	computed: {
 		selectNum() {
 			return this.list.reduce((t, v) => {
 				return t + v.num;
@@ -137,19 +137,19 @@ export default {
 		}
 	},
 	methods: {
-		changeNum(type,index){
-			let newObj = this.list[index]
-			if(type == 1){
-				newObj.num--
-			}else{
-				newObj.num++
+		changeNum(type, index) {
+			let newObj = this.list[index];
+			if (type == 1) {
+				newObj.num--;
+			} else {
+				newObj.num++;
 			}
-			this.list.splice(index,1,newObj)
+			this.list.splice(index, 1, newObj);
 		},
-		saveSelect(){
+		saveSelect() {
 			uni.navigateBack({
-				delta:1
-			})
+				delta: 1
+			});
 		},
 		gotoActionDetail() {
 			uni.navigateTo({
@@ -174,6 +174,9 @@ export default {
 		// ListTouch计算方向
 		ListTouchMove(e) {
 			this.isClick = false;
+			if(Math.abs(e.touches[0].pageX - this.listTouchStart)<20){
+				return
+			}
 			this.listTouchDirection = e.touches[0].pageX - this.listTouchStart > 0 ? 'right' : 'left';
 		},
 		// ListTouch计算滚动
@@ -198,6 +201,8 @@ export default {
 	.searchBox {
 		padding: 30rpx;
 		.iptBox {
+			flex: 1;
+			margin-right: 25rpx;
 			height: 66rpx;
 			background-color: #f6f6f6;
 			border-radius: 16rpx;

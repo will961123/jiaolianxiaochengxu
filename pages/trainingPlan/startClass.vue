@@ -1,6 +1,6 @@
 <template>
 	<view class="startClassView">
-		<view class="topBox bg-white">
+		<view class="topBox  ">
 			<view class="menuBox flex align-center justify-end">
 				<text class="margin-right-lg">{{ fillterTime }}</text>
 				<button class="btn cu-btn bg-blue sm margin-right-lg">关联预约记录</button>
@@ -20,19 +20,19 @@
 							15999999999
 						</view>
 					</view>
-					<view class="rBottom flex justify-between">
-						<view class="name">
+					<view class="rBottom flex  align-center">
+						<view class="name margin-right-lg">
 							<text class="cuIcon cuIcon-text"></text>
 							减脂课
 						</view>
 						<view class="day">
 							<text class="cuIcon cuIcon-edit"></text>
-							2020-06-24
+							2020-06-24 16:17--17:10
 						</view>
-						<view class="time">
+						<!-- <view class="time">
 							<text class="cuIcon cuIcon-time"></text>
-							16:17--17:10
-						</view>
+							
+						</view> -->
 					</view>
 				</view>
 			</view>
@@ -40,8 +40,8 @@
 
 		<view class="progressBox bg-white flex">
 			<view v-for="(item, index) in 5" :key="index" class="lineBox flex ">
-				<view class="item flex flex-direction align-end">
-					<view :class="index < 3 ? 'select' : ''" class="line"></view>
+				<view @click="changeNowIdx(index)" class="item flex flex-direction align-end">
+					<view :class="index <= nowIdx ? 'select' : ''" class="line"></view>
 					<view class="desc">
 						<text class="name">{{ index }}伸展</text>
 						<view class="num">4组</view>
@@ -59,47 +59,55 @@
 			</view>
 			<view class="right">完成情况</view>
 		</view>
-
-		<scroll-view class="bg-white" :style="{ height: scrollViewHeight }" id="scrollView" scroll-y="true">
-			<view class="cu-list menu-avatar parameterBox">
-				<view
-					class="cu-item item "
-					:class="modalName == 'move-box-' + idx ? 'move-cur' : ''"
-					v-for="(itm, idx) in list"
-					:key="idx"
-					@touchstart="ListTouchStart"
-					@touchmove="ListTouchMove"
-					@touchend="ListTouchEnd"
-					:data-target="'move-box-' + idx"
-				>
-					<picker
-						style="display: inline-block;width: 18%;text-align: center;border-right: 1rpx solid #dddddd;"
-						:range="numList"
-						@change="bindPickerChange($event, 1, idx)"
-						mode="multiSelector"
-					>
-						{{ itm.num }}{{ numList[1][itm.numType] }}
-					</picker>
-					<text @tap="showModal" :data-changeidx="idx" data-target="Resistance">{{ itm.kg }}{{ itm.kgType }}</text>
-					<text @tap="showModal" :data-changeidx="idx" data-target="Rest" Rest class="no-border">休息{{ itm.rest }}s</text>
-					<text @tap="showModal" style="border: none;" :data-changeIdx="idx" data-target="ChooseModal">{{ itm.equipment }}</text>
-					<view class="picBox flex align-center justify-end">
-						<block v-if="itm.doType === -1">
-							<image @click="changePicType(idx, index)" v-for="(item, index) in picType" :key="index" :src="item.pic" mode="aspectFill"></image>
-						</block>
-
-						<image v-else :src="'/static/pic' + itm.doType + '.png'" mode="aspectFill"></image>
-					</view>
-					<view @click.stop="del(idx)" class="move"><view class="bg-red">删除</view></view>
-				</view>
-			</view>
-		</scroll-view>
+		
+		
+		<swiper @change="swiperChange" :current="nowIdx" :style="{ height: scrollViewHeight }"  >
+			<swiper-item v-for="(switem,swidx) in 5" :key="swidx" >
+				 <scroll-view class="bg-white" :style="{ height: scrollViewHeight }" id="scrollView" scroll-y="true">
+				 	<view class="cu-list menu-avatar parameterBox">
+				 		<view
+				 			class="cu-item item "
+				 			:class="modalName == 'move-box-' + idx ? 'move-cur' : ''"
+				 			v-for="(itm, idx) in list"
+				 			:key="idx"
+				 			@touchstart="ListTouchStart"
+				 			@touchmove="ListTouchMove"
+				 			@touchend="ListTouchEnd"
+				 			:data-target="'move-box-' + idx"
+				 		>
+				 			<picker
+				 				style="display: inline-block;width: 18%;text-align: center;border-right: 1rpx solid #dddddd;"
+				 				:range="numList"
+				 				@change="bindPickerChange($event, 1, idx)"
+				 				mode="multiSelector"
+				 			>
+				 				{{ itm.num }}{{ numList[1][itm.numType] }}
+				 			</picker>
+				 			<text @tap="showModal" :data-changeidx="idx" data-target="Resistance">{{ itm.kg }}{{ itm.kgType }}</text>
+				 			<text @tap="showModal" :data-changeidx="idx" data-target="Rest" Rest class="no-border">休息{{ itm.rest }}s</text>
+				 			<text @tap="showModal" style="border: none;" :data-changeIdx="idx" data-target="ChooseModal">{{ itm.equipment }}</text>
+				 			<view class="picBox flex align-center justify-end">
+				 				<block v-if="itm.doType === -1">
+				 					<image @click="changePicType(idx, index)" v-for="(item, index) in picType" :key="index" :src="item.pic" mode="aspectFill"></image>
+				 				</block>
+				 
+				 				<image v-else :src="'/static/pic' + itm.doType + '.png'" mode="aspectFill"></image>
+				 			</view>
+				 			<view @click.stop="del(idx)" class="move"><view class="bg-red">删除</view></view>
+				 		</view>
+				 
+				 		<view @click="addOneItem" class=" item addItem flex align-center justify-center">
+				 			<view style="font-weight: 700;margin-right: 10rpx;" class="text-black ">+</view>
+				 			<view>添加组</view>
+				 		</view>
+				 	</view>
+				 </scroll-view>
+			</swiper-item>  
+		</swiper> 
 
 		<view class="bottomMenuBox">
 			<view class="addBox">
-				<view @click="ChooseImage" class="pic flex justify-center align-center">
-					<text class="cuIcon cuIcon-cameraaddfill"></text>
-				</view>
+				<view @click="ChooseImage" class="pic flex justify-center align-center"><text class="cuIcon cuIcon-cameraaddfill"></text></view>
 			</view>
 		</view>
 
@@ -150,7 +158,7 @@
 						</view>
 					</view>
 					<view class="ipt bg-white flex align-center justify-between">
-						<input v-model="resistance" type="digit" placeholder="请输入" />
+						<input :focus="focus" v-model="resistance" type="digit" placeholder="请输入" />
 						<view @click="saveKgChange" class="text-blue">确定</view>
 					</view>
 				</view>
@@ -162,7 +170,7 @@
 			<view style="padding: 0;" class="cu-dialog bg-white" @tap.stop="">
 				<view class="iptbox2">
 					<view class="ipt bg-white flex align-center justify-between">
-						<input v-model="restValue" type="number" placeholder="请输入" />
+						<input :focus="focus2" v-model="restValue" type="number" placeholder="请输入" />
 						<view @click="saveRestChange" class="text-blue">确定</view>
 					</view>
 				</view>
@@ -176,6 +184,9 @@ let timer = null;
 export default {
 	data() {
 		return {
+			focus: false,
+			focus2: false,
+			nowIdx: 2,
 			time: 0,
 			scrollViewHeight: 'calc(30vh)', // scrollview 高度
 			modalName: '',
@@ -219,8 +230,8 @@ export default {
 			restValue: '',
 
 			changeIdx: -1,
-			
-			imgList:[]
+
+			imgList: []
 		};
 	},
 	computed: {
@@ -237,7 +248,7 @@ export default {
 		query
 			.select('#scrollView')
 			.boundingClientRect(data => {
-				this.scrollViewHeight = `calc(100vh - ${data.top.toFixed(2)}px - 50px)`; 
+				this.scrollViewHeight = `calc(100vh - ${data.top.toFixed(2)}px - 50px)`;
 			})
 			.exec();
 	},
@@ -303,13 +314,26 @@ export default {
 		clearInterval(timer);
 	},
 	methods: {
-		stop(){
-			uni.navigateTo({
-				url:'/pages/trainingPlan/courseSummary'
-			})
+		swiperChange(e){
+			console.log(e)
+			if(e.detail.source === 'touch'){
+				this.nowIdx = e.detail.current
+			}
 		},
-		chnageResistanceType(type){
-			this.resistanceType = type
+		addOneItem() {
+			this.list.push(this.list[0]);
+		},
+		changeNowIdx(idx) {
+			this.nowIdx = idx;
+		},
+		stop() {
+			uni.navigateTo({
+				url: '/pages/trainingPlan/courseSummary'
+			});
+		},
+		chnageResistanceType(type) {
+			this.resistanceType = type;
+			this.focus = true;
 		},
 		ChooseImage() {
 			uni.chooseImage({
@@ -400,9 +424,16 @@ export default {
 		showModal(e) {
 			this.modalName = e.currentTarget.dataset.target;
 			this.changeIdx = e.currentTarget.dataset.changeidx;
+			if (this.modalName === 'Resistance') {
+				this.focus = true;
+			} else if (this.modalName === 'Rest') {
+				this.focus2 = true;
+			}
 		},
 		hideModal(e) {
 			this.modalName = null;
+			this.focus = false;
+			this.focus2 = false;
 		},
 		bindPickerChange(e, type, idx) {
 			switch (type) {
@@ -422,7 +453,12 @@ export default {
 		del(idx) {
 			uni.showModal({
 				title: '删除动作',
-				content: `确定删除吗?`
+				content: `确定删除吗?`,
+				success: res => {
+					if (res.confirm) {
+						this.list.splice(idx, 1);
+					}
+				}
 			});
 		},
 		// ListTouch触摸开始
@@ -432,6 +468,10 @@ export default {
 		// ListTouch计算方向
 		ListTouchMove(e) {
 			this.isClick = false;
+			console.log(e.touches[0].pageX - this.listTouchStart);
+			if (Math.abs(e.touches[0].pageX - this.listTouchStart) < 20) {
+				return;
+			}
 			this.listTouchDirection = e.touches[0].pageX - this.listTouchStart > 0 ? 'right' : 'left';
 		},
 		// ListTouch计算滚动
@@ -450,12 +490,14 @@ export default {
 <style lang="scss">
 .startClassView {
 	.topBox {
+		color: #fff;
+		background-color: #4c515f;
 		padding-bottom: 20px;
 		.userBox {
 			padding: 30rpx;
 			.headBox {
-				width: 140rpx;
-				height: 140rpx;
+				width: 110rpx;
+				height: 110rpx;
 				margin-right: 30rpx;
 				& > image {
 					width: 100%;
@@ -464,6 +506,7 @@ export default {
 				}
 			}
 			.right {
+				padding: 4rpx 0;
 				flex: 1;
 			}
 		}
@@ -530,6 +573,7 @@ export default {
 		border-radius: 8rpx;
 		// margin-top: 14px;
 		padding-top: 20px;
+
 		.item {
 			height: 54px;
 			position: relative;
@@ -566,6 +610,11 @@ export default {
 				font-size: 32rpx;
 				margin-left: 10rpx;
 			}
+		}
+		.addItem {
+			border: 1rpx dashed #666;
+			background-color: #fff;
+			text-align: center;
 		}
 	}
 	.picBox {
@@ -629,7 +678,7 @@ export default {
 				.ipt {
 					padding: 0 25rpx;
 					width: 100%;
-					height: 44px;
+					height: 56px;
 					input {
 						height: 100%;
 						flex: 1;
@@ -675,7 +724,7 @@ export default {
 			padding: 15rpx 25rpx;
 			border-left: 1rpx solid #fff;
 			float: right;
-			.pic{
+			.pic {
 				width: 60rpx;
 				height: 60rpx;
 				color: #4d505f;
@@ -683,7 +732,6 @@ export default {
 				border-radius: 50%;
 				font-size: 34rpx;
 			}
-			
 		}
 	}
 }

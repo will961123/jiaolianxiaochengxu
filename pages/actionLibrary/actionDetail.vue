@@ -1,11 +1,13 @@
 <template>
 	<!-- 动作详情 -->
 	<view class="actionDetailView">
-		<cu-custom bgColor="bg-myblack" :isBack="true">
+	<!-- 	<cu-custom bgColor="bg-myblack" :isBack="true">
 			<block slot="content">动作详情</block>
 			<block slot="right"><text @click="gotoAddAction" style="font-size: 30rpx; margin-right: 14px;">编辑</text></block>
-		</cu-custom>
-
+		</cu-custom> -->
+		<!-- <view class="topBox">
+			<text @click="gotoAddAction" style="font-size: 30rpx; ">编辑</text>
+		</view> -->
 		<view class="bannerBox">
 			<image v-if="actionDetail.banner.type === 1" :src="actionDetail.banner.src" mode="aspectFill"></image>
 			<video v-if="actionDetail.banner.type === 2" :src="actionDetail.banner.src" controls></video>
@@ -39,6 +41,10 @@
 			<view class="parametersBox flex flex-wrap">
 				<view class="item"><view>无</view></view>
 			</view>
+		</view>
+		
+		<view  @click="gotoAddAction"   class="btn bg-blue">
+			编辑
 		</view>
 	</view>
 </template>
@@ -76,6 +82,15 @@ export default {
 
 <style lang="scss">
 .actionDetailView {
+	padding-bottom: 65px;
+	.topBox{
+		font-size: 34rpx;
+		padding-right: 25rpx;
+		background-color: #4c515f;
+		line-height: 30px;
+		color: #fff;
+		text-align: right;
+	}
 	.bannerBox {
 		width: 100%;
 		height: 300rpx;
@@ -147,6 +162,18 @@ export default {
 				}
 			}
 		}
+	}
+	
+	.btn{
+		width: 100%;
+		position: fixed;
+		left: 50%;
+		transform: translate(-50%);
+		bottom: 0px;
+		height: 60px;
+		line-height: 60px;
+		text-align: center; 
+		margin: 0 auto;
 	}
 }
 </style>
