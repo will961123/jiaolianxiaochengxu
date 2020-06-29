@@ -21,45 +21,51 @@
 		</scroll-view>
 
 		<view class="joints bg-white flex align-center">
-			<view v-for="(item, index) in joints" :key="index" class="item">{{ item }}</view>
+			<view @click="changeJointsIdx(index)" v-for="(item, index) in joints" :key="index" :class="index===nowJoints?'bg-blue':''" class="item">{{ item }}</view>
 		</view>
-
-		<scroll-view :style="{ height: scrollViewHeight }" id="scrollView" scroll-y="true">
-			<view class="cu-list menu-avatar">
-				<view
-					class="cu-item "
-					:class="modalName == 'move-box-' + index ? 'move-cur' : ''"
-					v-for="(item, index) in list"
-					:key="index"
-					@touchstart="ListTouchStart"
-					@touchmove="ListTouchMove"
-					@touchend="ListTouchEnd"
-					@click="gotoActionDetail"
-					:data-target="'move-box-' + index"
-				>
-					<image class="cu-avatar lg" :src="item.logo" mode="aspectFill"></image>
-
-					<view class="content flex justify-between">
-						<view class="flex flex-direction">
-							<view class="text-black">{{ item.name }}</view>
-							<view class="text-gray text-sm">
-								<text v-for="(itm, idx) in item.bodyParts" :key="idx" class=" text-gray  margin-right-xs">{{ itm }}</text>
-								<text class="text-white">.</text>
-							</view>
-						</view>
-						<view v-show="type === 'select'" class="numBox flex align-center">
-							<view @click.stop="changeNum(1, index)" v-show="item.num > 0" class="less roundBox"><text class="cuIcon cuIcon-move text-bold"></text></view>
-							<view v-show="item.num > 0" class="num">{{ item.num }}</view>
-							<view @click.stop="changeNum(2, index)" class="add roundBox bg-blue"><text class="cuIcon cuIcon-add text-bold"></text></view>
-						</view>
-					</view>
-					<view @click.stop="del(index)" class="move">
-						<!-- <view class="bg-grey">置顶</view> -->
-						<view class="bg-red">删除</view>
-					</view>
-				</view>
-			</view>
-		</scroll-view>
+		
+		<swiper :current="nowJoints" @change="swiperChange" :style="{ height: scrollViewHeight }" >
+			<swiper-item v-for="(switem,swidx) in joints" :key='swidx' >
+				 <scroll-view :style="{ height: scrollViewHeight }" id="scrollView" scroll-y="true">
+				 	<view class="cu-list menu-avatar">
+				 		<view
+				 			class="cu-item "
+				 			:class="modalName == 'move-box-' + index ? 'move-cur' : ''"
+				 			v-for="(item, index) in list"
+				 			:key="index"
+				 			@touchstart="ListTouchStart"
+				 			@touchmove="ListTouchMove"
+				 			@touchend="ListTouchEnd"
+				 			@click="gotoActionDetail"
+				 			:data-target="'move-box-' + index"
+				 		>
+				 			<image class="cu-avatar lg" :src="item.logo" mode="aspectFill"></image>
+				 
+				 			<view class="content flex justify-between">
+				 				<view class="flex flex-direction">
+				 					<view class="text-black">{{ item.name }}</view>
+				 					<view class="text-gray text-sm">
+				 						<text v-for="(itm, idx) in item.bodyParts" :key="idx" class=" text-gray  margin-right-xs">{{ itm }}</text>
+				 						<text class="text-white">.</text>
+				 					</view>
+				 				</view>
+				 				<view v-show="type === 'select'" class="numBox flex align-center">
+				 					<view @click.stop="changeNum(1, index)" v-show="item.num > 0" class="less roundBox"><text class="cuIcon cuIcon-move text-bold"></text></view>
+				 					<view v-show="item.num > 0" class="num">{{ item.num }}</view>
+				 					<view @click.stop="changeNum(2, index)" class="add roundBox bg-blue"><text class="cuIcon cuIcon-add text-bold"></text></view>
+				 				</view>
+				 			</view>
+				 			<view @click.stop="del(index)" class="move">
+				 				<!-- <view class="bg-grey">置顶</view> -->
+				 				<view class="bg-red">删除</view>
+				 			</view>
+				 		</view>
+				 	</view>
+				 </scroll-view>
+			</swiper-item> 
+		</swiper>
+		
+		
 
 		<view v-show="type === 'select'" class="selectNumBox bg-white flex align-center justify-between">
 			<view class="numBox flex1">
@@ -79,6 +85,7 @@
 export default {
 	data() {
 		return {
+			nowJoints:0,
 			selectIdx: 1,
 			scrollLeft: 0,
 			bodyParts: ['全部', '胸部', '背部', '肩部', '手臂', '颈部', '腹部', '腰部', '臀部', '腿部', '全身', '躯干'],
@@ -137,6 +144,14 @@ export default {
 		}
 	},
 	methods: {
+		changeJointsIdx(idx){
+			this.nowJoints = idx
+		},
+		swiperChange(e){ 
+			if(e.detail.source === 'touch'){
+				this.nowJoints = e.detail.current
+			}
+		},
 		changeNum(type, index) {
 			let newObj = this.list[index];
 			if (type == 1) {
@@ -230,6 +245,10 @@ export default {
 			margin-right: 24rpx;
 			font-size: 24rpx;
 			border-radius: 10rpx;
+		}
+		.bg-blue{
+			color: #fff;
+			background-color: #0081ff;
 		}
 	}
 

@@ -19,7 +19,7 @@ export default {
 				Vue.prototype.Custom = custom;
 				Vue.prototype.CustomBar = custom.bottom + custom.top - e.statusBarHeight+5;
 				console.log(Vue.prototype.CustomBar)
-				if( Vue.prototype.CustomBar || Vue.prototype.CustomBar<10){
+				if( !Vue.prototype.CustomBar || Vue.prototype.CustomBar<10){
 					Vue.prototype.CustomBar=65
 				} 
 				// #endif

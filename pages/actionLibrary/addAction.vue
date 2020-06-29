@@ -329,12 +329,10 @@ export default {
 	methods: {
 		changeResistanceType(type){
 			this.resistanceType = type 
-			this.focus = true;
-			setTimeout(()=>{ 
-				this.focus = false;
+			this.focus = false; 
+			setTimeout(()=>{  
 				this.focus = true;
-			},300)
-			console.log(this.focus)
+			},500) 
 			
 		},
 		save(){

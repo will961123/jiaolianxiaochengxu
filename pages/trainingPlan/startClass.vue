@@ -333,7 +333,10 @@ export default {
 		},
 		chnageResistanceType(type) {
 			this.resistanceType = type;
-			this.focus = true;
+			this.focus = false;
+			setTimeout(()=>{  
+				this.focus = true;
+			},500) 
 		},
 		ChooseImage() {
 			uni.chooseImage({

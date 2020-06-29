@@ -280,8 +280,11 @@ export default {
 			this.detailInfo[e.currentTarget.dataset.key][e.currentTarget.dataset.idx].select = !this.detailInfo[e.currentTarget.dataset.key][e.currentTarget.dataset.idx].select;
 		},
 		changeResistanceType(type) {
-			this.resistanceType = type;
-			this.focus = true;
+			this.resistanceType = type; 
+			this.focus = false;
+			setTimeout(()=>{  
+				this.focus = true;
+			},500) 
 		},
 		// 添加一项
 		addOneItem(e) {
